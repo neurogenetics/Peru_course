@@ -9,11 +9,12 @@ Login is https://notebook.hail.is if there are problems use https://notebook.hai
 password will be provided during the course.
 
 Software that is used today is:
-
+```
 Plink -> https://www.cog-genomics.org/plink/1.9/
 GCTA -> https://cnsgenomics.com/software/gcta/#Overview
 RVTEST -> http://zhanxw.github.io/rvtests/
 R -> https://www.r-project.org/
+```
 
 # Part1: Clean GWAS data....
 
