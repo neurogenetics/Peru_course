@@ -112,6 +112,69 @@ head PCA.eigenvec
 
 # Part3: Run genetic risk score....
 
+check overview of files that are in the folder
+```
+%%bash
+cd GWAS_course_files/GRS/
+ls
+```
+
+Calculate GRS
+```%%bash
+cd GWAS_course_files/GRS/
+plink --bfile NEUROX_GRS_only --score META5_GRS_NEUROX.txt --out NEUROX_GRS
+```
+
+plot and calculate P-values in R
+```%%bash
+cd GWAS_course_files/GRS/
+R
+library(dplyr)
+library(ggplot2)
+GRS <- read.table("NEUROX_GRS.profile",header=T)
+cov <- read.table("PHENOTYPES.txt",header=T)
+cov$PHENO <- NULL
+MM2 = merge(GRS,cov,by='IID')
+data <- MM2
+meanGRS <- mean(data$SCORE)
+sdGRS <- sd(data$SCORE)
+data$SCOREZ <- (data$SCORE - meanGRS)/sdGRS
+# association-test
+data$PHENO <- data$PHENO-1
+thisFormula1 <- formula(paste("PHENO ~ SCOREZ + sex  + AGE + PC1 + PC2 + PC3 + PC4 + PC5 + PC6 + PC7 + PC8 + PC9 + PC10"))
+model1 <- glm(thisFormula1, data = data, ,family=binomial)
+print(summary(model1))
+# optional if p-value is really low
+summary(model1)$coefficients[,4]
+# plotting
+# option 1 (simple)
+data$PHENO <- data$PHENO+1
+#pdf("MY_PLOT.pdf",width=4)
+jpeg(file="MY_PLOT.jpeg")
+boxplot(data$SCOREZ~data$PHENO,col=c('grey', 'red'),xlab="1 control, 2 PD-case",ylab="GRS Z-score",main="PD genetic risk score")
+grid()
+boxplot(data$SCOREZ~data$PHENO, add=TRUE)
+dev.off()
+# option 2 (more fancy)
+# pdf("MY_PLOT2.pdf",width=6)
+jpeg(file="MY_PLOT2.jpeg")
+p <- ggplot(data, aes(x=as.factor(PHENO), y=SCOREZ, fill=as.factor(PHENO))) + 
+  geom_violin(trim=FALSE)
+p2 <- p+geom_boxplot(width=0.4, fill="white" ) + theme_minimal()
+p2 + scale_fill_manual(values=c("grey", "red")) + theme_bw() + 
+labs(title="PD genetic risk score",x="1 control, 2 PD case", y = "GRS Z-score") + theme(legend.position="none")
+dev.off()
+```
+
+then view images:
+```# simple plot
+from IPython.display import Image
+Image(filename="GWAS_course_files/GRS/MY_PLOT.jpeg")
+
+# more complex plot
+from IPython.display import Image
+Image(filename="GWAS_course_files/GRS/MY_PLOT2.jpeg")
+```
 
 # Part4: Run burden test....
 
@@ -135,7 +198,7 @@ as preparation we already created some files to make it easier
 # tabix -p vcf BURDEN_INPUT.vcf.gz
 ```
 
-check overview of files that are in the folder:
+check overview of files that are in the folder
 ```
 %%bash
 cd GWAS_course_files/BURDEN/
