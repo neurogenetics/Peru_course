@@ -108,6 +108,65 @@ head PCA.eigenvec
 ```
 
 # Part2: Run GWAS....
+Using the imputed data (we have no time to do the actual imputation) so will use an example dataset
+imputation imputed a lot of variants, many that might be not high quality
+
+First we create variant list R2> 0.3 and then we run a GWAS on a small piece of the genome
+
+Inspect content
+```
+%%bash
+cd GWAS_course_files/GWAS/
+ls
+```
+
+Filter imputed data
+Normally for all 22 chromosomes... # but today just one...
+Here just one chromosome part
+```
+%%bash
+cd GWAS_course_files/GWAS/
+R
+library(plyr)
+  input <- paste("chr4_short.info.gz")
+  data <- read.table(input, header = T)
+  dat <- subset(data, MAF >= 0.01 & Rsq >= 0.30)
+  dat$chr <- ldply(strsplit(as.character(dat$SNP), split = ":"))[[1]]
+  dat$bp <- ldply(strsplit(as.character(dat$SNP), split = ":"))[[2]]
+  da <- dat[,c("SNP","ALT_Frq","Rsq")]
+  write.table(da, paste("maf001rsq03minimums_chr4.info",sep = ""), row.names = F, quote = F, sep = "\t")
+  
+  input <- paste("chr4_short.info.gz", sep = "")
+  data <- read.table(input, header = T)
+  dat <- subset(data, MAF >= 0.01 & Rsq >= 0.30)
+  dat$chr <- ldply(strsplit(as.character(dat$SNP), split = ":"))[[1]]
+  dat$bp <- ldply(strsplit(as.character(dat$SNP), split = ":"))[[2]]
+  dat$range <- paste(dat$chr, ":", dat$bp, "-", dat$bp, sep = "")
+  da <- dat[,c("range")]
+  write.table(da, paste("maf001rsq03minimums_chr4.txt",sep = ""), col.names = F, row.names = F, quote = F, sep = "\t")
+```
+
+RUN GWAS
+again normally loop for each chromosome... 
+Analysis takes about 3-4 minutes for 765 cases and 1982 controls and a couple thousand variants
+```
+%%bash
+cd GWAS_course_files/GWAS/
+rvtest --noweb --hide-covar --rangeFile maf001rsq03minimums_chr4.txt \
+--out EXAMPLE_DATA_GWAS --single wald \
+--inVcf EXAMPLE_DATA.vcf.gz --dosage DS --pheno covariates.txt \
+--pheno-name PHENO_PLINK --covar covariates.txt \
+--covar-name SEX_COV,PC1,PC2,PC3,PC4,PC5
+```
+
+Inspect results file
+4:90641340 is P=4.20E-06 = rs356220 which is one of the top variants for PD
+This variant has a beta of -0.29, which is on OR of ~1.3
+```
+%%bash
+cd GWAS_course_files/GWAS/
+sort -gk 9 EXAMPLE_DATA_GWAS.SingleWald.assoc | head
+```
 
 
 # Part3: Run genetic risk score....
@@ -169,7 +228,8 @@ dev.off()
 ```
 
 then view images:
-```# simple plot
+```
+# simple plot
 from IPython.display import Image
 Image(filename="GWAS_course_files/GRS/MY_PLOT.jpeg")
 
@@ -217,7 +277,8 @@ rvtest --noweb --hide-covar --out burden_skat --kernel skato --burden cmc --inVc
 # optional options to add: --freqUpper 0.05
 ```
 check output
-```%%bash
+```
+%%bash
 cd GWAS_course_files/BURDEN/
 ls
 echo "SKAT"
