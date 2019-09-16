@@ -50,6 +50,8 @@ cd GWAS_course_files/QC_PACKAGE/
 ls
 ```
 ## step 2 edit files
+click the "GWAS_course_files" directory and then the "QC_PACKAGE" directory
+
 ```
 click and open STEP1_cleaning.sh and edit
 change ./plink into plink
