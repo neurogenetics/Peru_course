@@ -1,4 +1,4 @@
-# Peru_course
+# Peru Lima course ISIA
 Tuesday 17 September 2019
 Creators: Cornelis Blauwendraat, Sara Bandres-Ciga
 
