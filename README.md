@@ -120,13 +120,15 @@ ls
 ```
 
 Calculate GRS
-```%%bash
+```
+%%bash
 cd GWAS_course_files/GRS/
 plink --bfile NEUROX_GRS_only --score META5_GRS_NEUROX.txt --out NEUROX_GRS
 ```
 
 plot and calculate P-values in R
-```%%bash
+```
+%%bash
 cd GWAS_course_files/GRS/
 R
 library(dplyr)
