@@ -1,11 +1,19 @@
 # Peru_course
 Tuesday 17 September 2019
+Creators: Cornelis Blauwendraat, Sara Bandres-Ciga
 
 Jupyter notebooks, very kindly provided by Broad (Thank you very much!!!)
 
 Login is https://notebook.hail.is if there are problems use https://notebook.hail.is/new
 
 password will be provided during the course.
+
+Software that is used today is:
+
+Plink -> https://www.cog-genomics.org/plink/1.9/
+GCTA -> https://cnsgenomics.com/software/gcta/#Overview
+RVTEST -> http://zhanxw.github.io/rvtests/
+R -> https://www.r-project.org/
 
 # Part1: Clean GWAS data....
 
@@ -102,10 +110,54 @@ head PCA.eigenvec
 # Part2: Run GWAS....
 
 
-Part3: Run genetic risk score....
+# Part3: Run genetic risk score....
 
 
-Part4: Run burden test....
+# Part4: Run burden test....
 
+```
+as preparation we already created some files to make it easier
+# subset only the variats of interest in this case 3 GBA variants that have been associated with Parkinson
+# plink --bfile NEUROX --extract GBA_BURDEN_variants.txt --make-bed --out NEUROX_GBA
+# GBA variants:
+# 1:155206167 => E326K 
+# 1:155206037 => T369M
+# 1:155205634 => N370S
+# cat GBA_BURDEN_variants.txt
+# NeuroX_rs2230288
+# exm106220
+# exm106217
+# make from the plink file a .vcf files
+# extract the variants you are interested in (usually coding variants)
+# plink --bfile NEUROX_GBA --extract GBA_BURDEN_variants.txt --recode vcf-iid --out BURDEN_INPUT
+# then zip and index the .vcf file (need samtools or htslib for this
+# bgzip -c BURDEN_INPUT.vcf > BURDEN_INPUT.vcf.gz
+# tabix -p vcf BURDEN_INPUT.vcf.gz
+```
 
+check overview of files that are in the folder:
+```
+%%bash
+cd GWAS_course_files/BURDEN/
+ls
+```
+then run rvtest burden either all genes or just one gene...
+```
+%%bash
+cd GWAS_course_files/BURDEN/
+rvtest --noweb --hide-covar --out burden_skat --kernel skato --burden cmc --inVcf BURDEN_INPUT.vcf.gz \
+--pheno PHENOTYPES.txt --pheno-name PHENO --covar PHENOTYPES.txt \
+--covar-name sex,AGE,PC1,PC2,PC3,PC4,PC5,PC6,PC7,PC8,PC9,PC10 \
+--geneFile refFlat_hg19.txt.gz --gene GBA
+# optional options to add: --freqUpper 0.05
+```
+check output
+```%%bash
+cd GWAS_course_files/BURDEN/
+ls
+echo "SKAT"
+head burden_skat.SkatO.assoc
+echo "CMC"
+head burden_skat.CMC.assoc
+```
 
