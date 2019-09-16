@@ -50,29 +50,34 @@ cd GWAS_course_files/QC_PACKAGE/
 ls
 ```
 ## step 2 edit files
-```click and open STEP1_cleaning.sh and edit
+```
+click and open STEP1_cleaning.sh and edit
 change ./plink into plink
 change ./gcta into gcta64
 then file save
 ```
 
-```click and open PCA_in_R.R and edit
+```
+click and open PCA_in_R.R and edit
 pdf("FILE.pdf") -> jpeg("FILE.jpeg")
 then file save
 ```
 
 ## step 3 run it...
-```%%bash
+```
+%%bash
 cd GWAS_course_files/QC_PACKAGE/
 sh STEP1_cleaning.sh EXAMPLE_DATA
 ```
 
 ## step 4 (optional) to vizualize files
-``` check images:
+``` 
+check images:
 from IPython.display import Image
 Image(filename="GWAS_course_files/QC_PACKAGE/raw_hapmap_plot.jpeg")
 ```
-``` check files:
+``` 
+check files:
 %%bash
 cd GWAS_course_files/QC_PACKAGE/
 head PCA_filtered_europeans.txt
