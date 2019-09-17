@@ -1,7 +1,7 @@
 # Lima, Peru Course: ISIA
 
 - **Date:** Tuesday 17 September 2019
-- **Creators:** Cornelis Blauwendraat, Sara Bandres-Ciga
+- **Creators:** Cornelis Blauwendraat, Sara Bandres-Ciga, Mary Makarious
 - **Acknowledgements:** Hail-driven Jupyter Notebooks, very kindly provided by the [Broad Institute]([https://www.broadinstitute.org/](https://www.broadinstitute.org/)) (Thank you very much!!!)
 
 ## Table of Contents
