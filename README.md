@@ -350,7 +350,7 @@ Check the files that are in the folder:
 cd GWAS_course_files/BURDEN/
 ls
 ```
-### Step 2: Using RVtests to run a burden test (One or More Genes)
+### Step 2: Using RVtests to Run a Burden Test (One or More Genes)
 We will be running a burden test using RVtests. This can be done on one gene or on a list of multiple genes by running the following: 
 ```bash
 %%bash
